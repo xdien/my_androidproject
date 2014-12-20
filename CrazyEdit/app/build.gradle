@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 20
+    buildToolsVersion "20.0.0"
+    sourceSets.main {
+        jni.srcDirs  =["jni"]
+        jniLibs.srcDir 'libs'
+    }
+
+    defaultConfig {
+        applicationId "com.crazy.xdien.crazyedit"
+        minSdkVersion 15
+        targetSdkVersion 20
+        versionCode 1
+        versionName "1.0"
+        ndk{
+            abiFilter "armeabi-v7a"
+            moduleName "mylibs"
+            cFlags " -mfloat-abi=softfp -fexceptions -D_DEBUG -I/home/xdien/AndroidStudioProjects/OpenCV-2.4.9-android-sdk/sdk/native/jni/include"
+            //cFlags "-DANDROID_NDK -D_DEBUG -std=c99 -I${project.buildDir}/../src/main/jni/inc"   // Define some macros
+            ldLibs "dl" , "log"       // Link with these libraries!
+            stl "stlport_static"                    //"stlport_shared" Use shared stlport library
+        }
+    }
+    productFlavors {
+        x86 {
+            ndk {
+                abiFilter "x86"
+            }
+        }
+        arm {
+            ndk {
+                abiFilter "armeabi-v7a"
+            }
+        }
+        mips {
+            ndk {
+                abiFilter "mips"
+            }
+        }
+    }
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:20.0.+'
+    compile 'it.sephiroth.android.library.imagezoom:imagezoom:+'
+    compile 'com.larswerkman:HoloColorPicker:1.+'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':openCVLibrary249')
+}
